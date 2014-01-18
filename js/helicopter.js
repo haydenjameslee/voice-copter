@@ -675,7 +675,7 @@ var HELICOPTER = (function() {
   }
 
   function startScreen() {
-
+    state = Heli.State.WAITING;
     screen.draw(ctx);
     screen.drawTerrain(ctx);
 
@@ -701,7 +701,6 @@ var HELICOPTER = (function() {
   }
 
  function calibrateBackground() {
-    state = Heli.State.WAITING;
     var volumes = [];
 
     screen.draw(ctx);
@@ -742,7 +741,6 @@ var HELICOPTER = (function() {
         alert("Your mic is not on")
         calibrateBackground();
       }
-      
       startScreen();
     }, 5000);
 
