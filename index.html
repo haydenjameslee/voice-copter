@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>HTML5 Helicopter</title>
+    
+    <style type="text/css">
+       * { margin: 0; padding: 0; }
+       html, body, #helicopter { height: 100%; }
+       body { visibility: hidden; }
+       html.wf-silkscreen-n4-active body { visibility: visible; }
+    </style>
+
+</head>
+
+<body>
+
+  <span style="font-family:SilkScreenBold;"> </span>
+
+  <div id="helicopter"></div>
+
+  <script src="js/helicopter.js"></script>
+
+  <script>
+
+    var families = ['SilkScreenBold', 'SilkScreen'];
+
+    var INIT = (function (HELICOPTER, families) {
+
+      var numLoaded  = 0;
+      var numFonts   = families.length;
+      var helicopter = document.getElementById('helicopter');
+
+      function loaded() {
+        HELICOPTER.init(helicopter, './');
+      };
+
+      function fontLoaded(family, desc) {
+        if (++numLoaded === numFonts) {
+          loaded();
+        }
+      };
+    
+      return {fontLoaded: fontLoaded};
+
+    })(HELICOPTER, families);
+
+    WebFontConfig = { 
+      custom : { 
+        families : families, 
+        urls     : ['./style/silkscreenbold.css', './style/silkscreen.css']
+      },
+      fontactive : INIT.fontLoaded
+    };
+
+  </script>
+
+  <script src="js/webfont.js"></script>
+
+</body>
+</html>
