@@ -689,7 +689,7 @@ var HELICOPTER = (function() {
     if (localMediaStream) {
       snapCtx.drawImage(video, 0, 0, 640, 480, 0, 0, 640, 480);
       snapCtx.font = "40pt Calibri";
-      snapCtx.fillText("@VoiceCopter", 20, 20);
+      snapCtx.fillText("@VoiceCopter", 40, 40);
       // "image/webp" works in Chrome.
       // Other browsers will fall back to image/png.
       var imageUrl = snapCanvas.toDataURL('image/png')
