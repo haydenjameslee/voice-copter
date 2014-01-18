@@ -629,7 +629,7 @@ var HELICOPTER = (function() {
     navigator.webkitGetUserMedia(
       {video: false, audio: true},
       function(stream) {
-        document.getElementById("spinner").style('display', 'none');
+        document.getElementById("spinner").style.display = 'none';
         var microphone = context.createMediaStreamSource(stream);
         microphone.connect(analyser);
         state = Heli.State.BACKGROUND;
