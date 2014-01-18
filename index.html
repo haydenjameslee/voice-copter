@@ -47,11 +47,11 @@
 
       function loaded() {
         Clay.ready( function() {
-          fd.leaderboard = new Clay.Leaderboard( { id: 2638 } );
+          var leaderboard = new Clay.Leaderboard( { id: 2638 } );
           if( de.keys.l === true )
           {
               de.keys.l = false;
-              fd.leaderboard.show();
+              leaderboard.show();
           }
           HELICOPTER.init(helicopter, './');
         });
