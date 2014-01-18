@@ -66,6 +66,7 @@ Heli.User = function (params) {
   var momentum = 2;
 
   function finished() {
+    stopRecording();
     var leaderboard = new Clay.Leaderboard( { id: 2638 } );
     if (_distance > bestDistance() && _distance > 25) {
       localStorage.bestDistance = _distance;
@@ -621,9 +622,35 @@ var HELICOPTER = (function() {
     //window.webkitRequestAnimationFrame(drawVisualizer, canvas);
     //ctx.fillRect(canvas.width/4, canvas.height/3, 20, -volume);
   }
+
   function fallback(e) {
     alert("You must be using Chrome");
   }
+
+  var streamRecorder;
+  var webcamstream;     
+                     
+  function startRecording() {
+    streamRecorder = webcamstream.record();
+  }
+
+  function stopRecording() {
+    streamRecorder.getRecordedData(postVideoToServer);
+  }
+
+  function postVideoToServer(videoblob) {
+
+    var data = {};
+    data.video = videoblob;
+    data.metadata = 'test metadata';
+    data.action = "upload_video";
+    jQuery.post("http://www.foundthru.co.uk/uploadvideo.php", data, onUploadSuccess);
+  }
+
+  function onUploadSuccess() {
+    alert ('video uploaded');
+  }
+
   function detectBackgroundScreen() {
     drawScore();
     window.AudioContext = window.AudioContext ||
@@ -637,9 +664,7 @@ var HELICOPTER = (function() {
                           navigator.msGetUserMedia;
 
     var video = document.querySelector('video');
-    var streamRecorder;
-    var webcamstream;     
-                     
+  
     if(!navigator.getUserMedia) {
       fallback();
     } else {
@@ -650,7 +675,7 @@ var HELICOPTER = (function() {
           microphone.connect(analyser);
           var video = document.querySelector('video');
           video.src = window.URL.createObjectURL(stream);
-
+          webcamstream = stream;
           state = Heli.State.BACKGROUND;
 
           screen.draw(ctx);
@@ -669,6 +694,7 @@ var HELICOPTER = (function() {
           ctx.font = '14px silkscreen';
 
           ctx.fillText('Click mouse to begin background noise calibration', x + 5, y + 66);
+          startRecording();
         }, 
         // errorCallback
         function(err) {
