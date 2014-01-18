@@ -692,7 +692,7 @@ var HELICOPTER = (function() {
       // Other browsers will fall back to image/png.
       var imageUrl = snapCanvas.toDataURL('image/png')
       document.getElementById('snapshot').src = imageUrl;
-      document.getElementsByTagName('meta')[2].setAttribute('content', imageUrl);
+      //document.getElementsByTagName('meta')[2].setAttribute('content', imageUrl);
     }
   }
 
