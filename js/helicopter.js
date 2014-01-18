@@ -649,8 +649,8 @@ var HELICOPTER = (function() {
           var microphone = context.createMediaStreamSource(stream);
           microphone.connect(analyser);
           var video = document.querySelector('video');
-          video.src = window.URL.createObjectURL(localMediaStream);
-          
+          video.src = window.URL.createObjectURL(stream);
+
           state = Heli.State.BACKGROUND;
 
           screen.draw(ctx);
