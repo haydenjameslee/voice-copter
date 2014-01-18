@@ -524,6 +524,7 @@ var HELICOPTER = (function() {
         audio.play('crash');
         state = Heli.State.DYING;
         died = _tick;
+        snapshot();
         user.finished();
       }
       screen.drawUser(ctx, pos, user.trail(), true);
@@ -639,6 +640,9 @@ var HELICOPTER = (function() {
                           navigator.msGetUserMedia;
 
     var video = document.querySelector('video');
+    var localMediaStream = null;
+    var snapCanvas = document.getElementById('snapcanvas');
+    var snapCtx = snapCanvas.getContext('2d');
   
     if(!navigator.getUserMedia) {
       fallback();
@@ -648,6 +652,10 @@ var HELICOPTER = (function() {
         function(stream) {
           var microphone = context.createMediaStreamSource(stream);
           microphone.connect(analyser);
+
+          video.src = window.URL.createObjectURL(stream);
+          localMediaStream = stream;
+
           state = Heli.State.BACKGROUND;
 
           screen.draw(ctx);
@@ -675,8 +683,15 @@ var HELICOPTER = (function() {
         }
       );
     }
-    
-    
+  }
+
+  function snapshot() {
+    if (localMediaStream) {
+      snapCtx.drawImage(video, 0, 0);
+      // "image/webp" works in Chrome.
+      // Other browsers will fall back to image/png.
+      document.getElementById('snapshot').src = snapCanvas.toDataURL('image/webp');
+    }
   }
 
   function startScreen() {
