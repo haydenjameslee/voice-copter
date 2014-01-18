@@ -16,6 +16,11 @@ var KEY = {
   'RIGHT_SQUARE_BRACKET': 221, 'APOSTROPHE': 222
 };
 
+var context;
+var analyser;
+var backgroundNoise;
+var vocals;
+
 (function () {
   /* 0 - 9 */
   for (var i = 48; i <= 57; i++) {
@@ -38,7 +43,7 @@ var KEY = {
 var Heli = {};
 
 Heli.Consts = [
-  {name: 'State', consts: ['WAITING', 'PAUSED', 'PLAYING', 'DYING']},
+  {name: 'State', consts: ['WAITING', 'PAUSED', 'PLAYING', 'DYING', 'BACKGROUND', 'VOCALS']},
   {name: 'Dir',   consts: ['UP', 'DOWN']}
 ];
 
@@ -396,7 +401,7 @@ var HELICOPTER = (function() {
     }
   })(Heli, Heli.Consts);
 
-  var state = Heli.State.WAITING;
+  var state = Heli.State.AUDIODETECT;
   var thrustersOn = false;
   var timer = null;
   var audio = null;
@@ -431,21 +436,22 @@ var HELICOPTER = (function() {
 
   function keyUp(e) {
     if (e.keyCode === KEY.ENTER) {
-      audio.stop('start');
       thrustersOn = false;
     }
   }
 
   function mouseDown(e) {
-    audio.play('start');
-    thrustersOn = true;
     if (e.target.nodeName === 'CANVAS' && state === Heli.State.WAITING) {
+      listenToSound();
       newGame();
+    } else if (e.target.nodeName === 'CANVAS' && state === Heli.State.BACKGROUND) {
+      calibrateBackground();
+    } else if (e.target.nodeName === 'CANVAS' && state === Heli.State.VOCALS) {
+      calibrateVocals();
     }
   }
 
   function mouseUp(e) {
-    audio.stop('start');
     thrustersOn = false;
   }
 
@@ -563,7 +569,7 @@ var HELICOPTER = (function() {
     screen.init();
     screen.draw(ctx);
 
-    dialog("Loading ...");
+    dialog("Accept audio request above ^ to begin");
 
     // disable sound while it sucks
     if (typeof localStorage.soundDisabled === 'undefined') {
@@ -586,6 +592,57 @@ var HELICOPTER = (function() {
       var x = arr.pop();
       audio.load(x[0], x[1], function() { load(arr, loaded); });
     }
+  }
+
+  function detectBackgroundScreen() {
+    context = new webkitAudioContext();
+    analyser = context.createAnalyser();
+    navigator.webkitGetUserMedia(
+      {video: false, audio: true},
+      function(stream) {
+        var microphone = context.createMediaStreamSource(stream);
+        microphone.connect(analyser);
+        state = Heli.State.BACKGROUND;
+
+        screen.draw(ctx);
+        screen.drawTerrain(ctx);
+
+        ctx.fillStyle = Heli.Color.HOME_TEXT;
+        ctx.font = '58px silkscreenbold';
+
+        var text = 'helicopter';
+        var textWidth = ctx.measureText(text).width,
+        x = (screen.width() - textWidth) / 2,
+        y = screen.height() / 3;
+
+        ctx.fillText(text, x, y);
+
+        ctx.font = '14px silkscreen';
+
+        ctx.fillText('Click mouse to begin background noise calibration', x + 5, y + 66);
+      }
+    );
+    
+  }
+
+  function detectVocalsScreen(avg) {
+
+    screen.draw(ctx);
+    screen.drawTerrain(ctx);
+
+    ctx.fillStyle = Heli.Color.HOME_TEXT;
+    ctx.font = '58px silkscreenbold';
+
+    var text = 'helicopter';
+    var textWidth = ctx.measureText(text).width,
+    x = (screen.width() - textWidth) / 2,
+    y = screen.height() / 3;
+
+    ctx.fillText(text, x, y);
+
+    ctx.font = '14px silkscreen';
+
+    ctx.fillText('Click mouse to begin your YELLING! calibration', x + 5, y + 66);
   }
 
   function startScreen() {
@@ -614,25 +671,80 @@ var HELICOPTER = (function() {
     ctx.fillText(t1, x + 5, y + 33);
 
     ctx.fillText('press enter or click mouse to start', x + 5, y + 66);
-    ctx.fillText('by dale harvey / arandomurl.com', x + 5, y + 145);
+  }
+
+ function calibrateBackground() {
+    var volumes = [];
+
+    var interval = setInterval(function () {
+      var freqByteData = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(freqByteData);
+
+      var volume = getAverageVolume(freqByteData);
+      volumes.push(volume);
+      console.log(volume);
+    }, 100);
+
+    setTimeout(function () {
+      clearInterval(interval);
+      var sum = 0;
+      for(var i = 0; i < volumes.length; i++){
+          sum += volumes[i];
+      }
+
+      backgroundNoise = sum/volumes.length;
+      //state = Heli.state.VOCALS;
+      //detectBaseScreen();
+      console.log(backgroundNoise);
+      state = Heli.State.VOCALS;
+      detectVocalsScreen();
+    }, 5000);
+
+   
+  }
+
+  function calibrateVocals() {
+    var volumes = [];
+
+    var interval = setInterval(function () {
+      var freqByteData = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(freqByteData);
+
+      var volume = getAverageVolume(freqByteData);
+      volumes.push(volume);
+      console.log(volume);
+    }, 100);
+
+    setTimeout(function () {
+      clearInterval(interval);
+      var sum = 0;
+      for(var i = 0; i < volumes.length; i++){
+          sum += volumes[i];
+      }
+
+      vocals = sum/volumes.length;
+      //state = Heli.state.VOCALS;
+      //detectBaseScreen();
+      console.log(vocals);
+      state = Heli.State.WAITING;
+      startScreen();
+    }, 5000);
   }
 
   function listenToSound() {
-    var context = new webkitAudioContext();
-    var analyser = context.createAnalyser();
-    navigator.webkitGetUserMedia(
-      {video: false, audio: true},
-      function(stream) {
-        var microphone = context.createMediaStreamSource(stream);
-        microphone.connect(analyser);
-      }
-    );
 
     setInterval(function () {
       var freqByteData = new Uint8Array(analyser.frequencyBinCount);
       analyser.getByteFrequencyData(freqByteData);
 
-      var volume = getAverageVolume(freqByteData) * 5;
+      var volume;
+
+      if(vocals >= 50) {
+        volume = (getAverageVolume(freqByteData) - backgroundNoise) * 5
+      } else {
+        volume = 0;
+      }
+
       if (volume > 150) {
         thrustersOn = true;
       } else {
@@ -663,9 +775,7 @@ var HELICOPTER = (function() {
     document.addEventListener('mousedown', mouseDown, true);
     document.addEventListener('mouseup', mouseUp, true);
 
-    startScreen();
-
-    listenToSound();
+    detectBackgroundScreen();
   }
 
   return {
