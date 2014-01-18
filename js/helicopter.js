@@ -86,15 +86,6 @@ Heli.User = function (params) {
     }
   }
 
-  function showScores() {
-    // table options
-    var table = {
-      table: "highscores",
-      page: 1,
-      perpage: 10,
-      highest: true
-  };
-
   function submitComplete(response) {
     if(response.success) {
         console.log("Score saved!");    
