@@ -508,7 +508,7 @@ var HELICOPTER = (function() {
 
   function mainLoop() {
     ++_tick;
-
+    drawScore();
     if (state === Heli.State.PLAYING) {
 
       pos = user.move(thrustersOn);
@@ -536,7 +536,7 @@ var HELICOPTER = (function() {
       window.clearInterval(timer);
       timer = null;
     } else if (state === Heli.State.DYING) {
-
+      
       screen.draw(ctx);
       screen.drawTerrain(ctx);
       screen.drawUser(ctx, pos, user.trail(), false);
@@ -544,7 +544,7 @@ var HELICOPTER = (function() {
       screen.drawTarget(ctx, pos, _tick - died);
     }
 
-    drawScore();
+    
   }
 
 
