@@ -622,7 +622,7 @@ var HELICOPTER = (function() {
     //ctx.fillRect(canvas.width/4, canvas.height/3, 20, -volume);
   }
   function fallback(e) {
-    alert("You must Accept");
+    alert("You must be using Chrome");
   }
   function detectBackgroundScreen() {
     drawScore();
@@ -661,6 +661,11 @@ var HELICOPTER = (function() {
           ctx.font = '14px silkscreen';
 
           ctx.fillText('Click mouse to begin background noise calibration', x + 5, y + 66);
+        }, 
+        // errorCallback
+       function(err) {
+        if(err === PERMISSION_DENIED) {
+          alert("You must accept audio permissions");
         }
       );
     }
