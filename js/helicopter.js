@@ -69,7 +69,10 @@ Heli.User = function (params) {
   function finished() {
     if (_distance > bestDistance()) {
       localStorage.bestDistance = _distance;
-      fd.leaderboard.post( { score: _distance } );
+      leaderboard.post( { score: 500 }, function( response ) {
+          // Callback
+          console.log( response );
+      } );
     }
   }
 
