@@ -48,11 +48,7 @@
       function loaded() {
         Clay.ready( function() {
           var leaderboard = new Clay.Leaderboard( { id: 2638 } );
-          if( de.keys.l === true )
-          {
-              de.keys.l = false;
-              leaderboard.show();
-          }
+          
           HELICOPTER.init(helicopter, './');
         });
       };
