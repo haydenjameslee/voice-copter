@@ -66,45 +66,10 @@ Heli.User = function (params) {
   var _trail   = null;
   var momentum = 2;
 
-  function submitScore() {
-    // basic score
-    var score = {
-      playername: "ben",
-      points: _distance,
-      table: "highscores",
-      allowduplicates: false
-    };
-
-    Playtomic.Leaderboards.saveAndList(score, listComplete); 
-  }
-
   function finished() {
     if (_distance > bestDistance()) {
       localStorage.bestDistance = _distance;
-      submitScore();
-    }
-  }
-
-  function submitComplete(response) {
-    if(response.success) {
-        console.log("Score saved!");    
-    } else {
-        // submission failed because of response.errormessage with response.errorcode
-    }
-  }
-
-  function listComplete(scores, numscores, response) {
-    if(response.success) {
-        console.log(scores.length + " scores returned out of " + numscores);
-
-        for(var i=0; i<scores.length; i++) {
-            var score = scores[i];
-            console.log(" - " + score.name + " got " + score.points + " on " + score.sdate);
-
-            // including custom data?  score.fields.property
-        }
-    } else {
-        // score listing failed because of response.errormessage with response.errorcode
+      fd.leaderboard.post( { score: _distance } );
     }
   }
 

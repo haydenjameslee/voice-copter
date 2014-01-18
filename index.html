@@ -18,7 +18,20 @@
   <span style="font-family:SilkScreenBold;"> </span>
 
   <div id="helicopter"></div>
-  <script src="js/playtomic.js"></script>
+
+  <script type="text/javascript">
+    Clay = {};
+    Clay.gameKey = "voicecopter";
+    Clay.readyFunctions = [];
+    Clay.ready = function( fn ) {
+        Clay.readyFunctions.push( fn );
+    };
+    ( function() {
+        var clay = document.createElement("script"); clay.async = true;
+        clay.src = ( "https:" == document.location.protocol ? "https://" : "http://" ) + "clay.io/api/api.js"; 
+        var tag = document.getElementsByTagName("script")[0]; tag.parentNode.insertBefore(clay, tag);
+    } )();
+  </script>
   <script src="js/helicopter.js"></script>
 
 
@@ -33,8 +46,15 @@
       var helicopter = document.getElementById('helicopter');
 
       function loaded() {
-        Playtomic.initialize("mypublickey", "myprivatekey", "http://fierce-ridge-2737.herokuapp.com/");
-        HELICOPTER.init(helicopter, './');
+        Clay.ready( function() {
+          fd.leaderboard = new Clay.Leaderboard( { id: 2638 } );
+          if( de.keys.l === true )
+          {
+              de.keys.l = false;
+              fd.leaderboard.show();
+          }
+          HELICOPTER.init(helicopter, './');
+        });
       };
 
       function fontLoaded(family, desc) {
