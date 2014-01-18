@@ -635,14 +635,22 @@ var HELICOPTER = (function() {
                           navigator.webkitGetUserMedia ||
                           navigator.mozGetUserMedia ||
                           navigator.msGetUserMedia;
+
+    var video = document.querySelector('video');
+    var streamRecorder;
+    var webcamstream;     
+                     
     if(!navigator.getUserMedia) {
       fallback();
     } else {
         navigator.getUserMedia(
-        {video: false, audio: true},
+        {video: true, audio: true},
         function(stream) {
           var microphone = context.createMediaStreamSource(stream);
           microphone.connect(analyser);
+          var video = document.querySelector('video');
+          video.src = window.URL.createObjectURL(localMediaStream);
+          
           state = Heli.State.BACKGROUND;
 
           screen.draw(ctx);
