@@ -66,7 +66,6 @@ Heli.User = function (params) {
   var momentum = 2;
 
   function finished() {
-    stopRecording();
     var leaderboard = new Clay.Leaderboard( { id: 2638 } );
     if (_distance > bestDistance() && _distance > 25) {
       localStorage.bestDistance = _distance;
@@ -525,6 +524,7 @@ var HELICOPTER = (function() {
         audio.play('crash');
         state = Heli.State.DYING;
         died = _tick;
+        stopRecording();
         user.finished();
       }
       screen.drawUser(ctx, pos, user.trail(), true);
@@ -631,7 +631,7 @@ var HELICOPTER = (function() {
   var webcamstream;     
                      
   function startRecording() {
-    streamRecorder = webcamstream.record();
+    
   }
 
   function stopRecording() {
@@ -675,7 +675,7 @@ var HELICOPTER = (function() {
           microphone.connect(analyser);
           var video = document.querySelector('video');
           video.src = window.URL.createObjectURL(stream);
-          webcamstream = stream;
+          streamRecorder = stream.record();
           state = Heli.State.BACKGROUND;
 
           screen.draw(ctx);
@@ -694,7 +694,6 @@ var HELICOPTER = (function() {
           ctx.font = '14px silkscreen';
 
           ctx.fillText('Click mouse to begin background noise calibration', x + 5, y + 66);
-          startRecording();
         }, 
         // errorCallback
         function(err) {
