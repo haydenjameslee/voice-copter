@@ -158,7 +158,7 @@ Heli.Screen = function (params) {
   var changeDir = 0;
   var _blockY = null;
   var _blockHeight = 20;
-  var heliHeight = (50 / params.height) * 100; // Convert px to %
+  var heliHeight = (30 / params.height) * 100; // Convert px to %
   var _terrain = [];
   var img = new Image();
   var img2 = new Image();
@@ -273,7 +273,7 @@ Heli.Screen = function (params) {
 
     var i, len, mid, image;
 
-    mid = Math.round(_terrain.length * 0.25);
+    mid = Math.round(_terrain.length * 0.5);
     image = (alternate && params.tick()) % 4 < 2 ? img : img2;
 
     ctx.fillStyle = Heli.Color.USER;
@@ -701,6 +701,7 @@ var HELICOPTER = (function() {
   }
 
  function calibrateBackground() {
+    state = Heli.State.WAITING;
     var volumes = [];
 
     screen.draw(ctx);
@@ -741,7 +742,7 @@ var HELICOPTER = (function() {
         alert("Your mic is not on")
         calibrateBackground();
       }
-      state = Heli.State.WAITING;
+      
       startScreen();
     }, 5000);
 
