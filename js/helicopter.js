@@ -664,7 +664,7 @@ var HELICOPTER = (function() {
         }, 
         // errorCallback
         function(err) {
-          if(err === PERMISSION_DENIED) {
+          if(err.name === "PERMISSION_DENIED") {
             alert("You must accept audio permissions");
           }
         }
