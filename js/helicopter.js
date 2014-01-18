@@ -627,6 +627,11 @@ var HELICOPTER = (function() {
     alert("You must be using Chrome");
   }
 
+  var video = document.querySelector('video');
+  var localMediaStream = null;
+  var snapCanvas = document.getElementById('snapcanvas');
+  var snapCtx = snapCanvas.getContext('2d');
+
   function detectBackgroundScreen() {
     drawScore();
     window.AudioContext = window.AudioContext ||
@@ -638,11 +643,6 @@ var HELICOPTER = (function() {
                           navigator.webkitGetUserMedia ||
                           navigator.mozGetUserMedia ||
                           navigator.msGetUserMedia;
-
-    var video = document.querySelector('video');
-    var localMediaStream = null;
-    var snapCanvas = document.getElementById('snapcanvas');
-    var snapCtx = snapCanvas.getContext('2d');
   
     if(!navigator.getUserMedia) {
       fallback();
