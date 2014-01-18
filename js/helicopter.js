@@ -730,7 +730,7 @@ var HELICOPTER = (function() {
       analyser.getByteFrequencyData(freqByteData);
 
       var volume = getAverageVolume(freqByteData) - backgroundNoise;
-
+      var vocals = 50;
       if (vocals <= (volume * 3)) {
         thrustersOn = true;
       } else {
