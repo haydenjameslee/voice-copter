@@ -552,7 +552,6 @@ var HELICOPTER = (function() {
 
   function drawScore() {
     ctx.font = '12px silkscreen';
-    ctx.fillStyle = Heli.Color.HOME_TEXT;
     var recordText = "Best: " + user.bestDistance() + "m";
     var distText = "Distance: " + user.distance() + "m";
     var textWidth = ctx.measureText(recordText).width;
