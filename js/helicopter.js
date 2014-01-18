@@ -19,7 +19,6 @@ var KEY = {
 var context;
 var analyser;
 var backgroundNoise;
-var vocals;
 
 var canvas;
 
