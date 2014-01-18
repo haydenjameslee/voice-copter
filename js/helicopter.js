@@ -687,7 +687,7 @@ var HELICOPTER = (function() {
 
   function snapshot() {
     if (localMediaStream) {
-      snapCtx.drawImage(video, 0, 0);
+      snapCtx.drawImage(video, 0, 0, 400, 400);
       // "image/webp" works in Chrome.
       // Other browsers will fall back to image/png.
       document.getElementById('snapshot').src = snapCanvas.toDataURL('image/webp');
