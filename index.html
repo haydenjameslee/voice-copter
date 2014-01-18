@@ -18,8 +18,9 @@
   <span style="font-family:SilkScreenBold;"> </span>
 
   <div id="helicopter"></div>
-
+  <script src="js/playtomic.js"></script>
   <script src="js/helicopter.js"></script>
+
 
   <script>
 
@@ -32,6 +33,7 @@
       var helicopter = document.getElementById('helicopter');
 
       function loaded() {
+        Playtomic.initialize("mypublickey", "myprivatekey", "http://fierce-ridge-2737.herokuapp.com");
         HELICOPTER.init(helicopter, './');
       };
 
