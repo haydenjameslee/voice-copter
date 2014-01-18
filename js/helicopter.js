@@ -77,7 +77,7 @@ Heli.User = function (params) {
       var show_options = { // all of these are optional
           html: "<strong>Hi</strong>", // Optional, any custom html you want to show below the name
           recent: 3600, // Optional, to limit scores to ones posted in last x seconds
-          sort: 'asc', // Optional, sorting by "asc" will show the lowest scores first (ex. for fastest times)
+          sort: 'desc', // Optional, sorting by "asc" will show the lowest scores first (ex. for fastest times)
           filter: ['day', 'month'], // Optional, Array of filters to narrow down high scores
           cumulative: false, // Optional, if set to true grabs the sum of all scores for each player
           best: false, // Optional, if set to true grabs the best score from each player
