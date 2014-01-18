@@ -624,8 +624,15 @@ var HELICOPTER = (function() {
 
   function detectBackgroundScreen() {
     drawScore();
-    context = new webkitAudioContext();
+    window.AudioContext = window.AudioContext ||
+                      window.webkitAudioContext;
+
+    var context = new AudioContext();
     analyser = context.createAnalyser();
+    navigator.getUserMedia  = navigator.getUserMedia ||
+                          navigator.webkitGetUserMedia ||
+                          navigator.mozGetUserMedia ||
+                          navigator.msGetUserMedia;
     navigator.getUserMedia(
       {video: false, audio: true},
       function(stream) {
