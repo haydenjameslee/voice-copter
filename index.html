@@ -23,7 +23,7 @@
 <body>
   <div id="spinner">
     <img alt="activity indicator" src="assets/ajax-loader.gif">
-    <p>Please Use <a href="https://www.google.com/intl/en/chrome/browser/">Google Chrome</a></p>
+    <p>Use <a href="https://www.google.com/intl/en/chrome/browser/">Google Chrome</a></p>
   </div>
   <span style="font-family:SilkScreenBold;"> </span>
 
@@ -58,8 +58,10 @@
 
       function loaded() {
         Clay.ready( function() {
-          document.getElementById("spinner").style.display = 'none';
-          HELICOPTER.init(helicopter, './');
+          if(window.chrome) {
+            document.getElementById("spinner").style.display = 'none';
+            ELICOPTER.init(helicopter, './');
+          }
         });
       };
 
