@@ -626,7 +626,7 @@ var HELICOPTER = (function() {
     drawScore();
     context = new webkitAudioContext();
     analyser = context.createAnalyser();
-    navigator.webkitGetUserMedia(
+    navigator.getUserMedia(
       {video: false, audio: true},
       function(stream) {
         var microphone = context.createMediaStreamSource(stream);
