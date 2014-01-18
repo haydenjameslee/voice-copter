@@ -665,6 +665,20 @@ var HELICOPTER = (function() {
  function calibrateBackground() {
     var volumes = [];
 
+    screen.draw(ctx);
+    screen.drawTerrain(ctx);
+
+    ctx.fillStyle = Heli.Color.HOME_TEXT;
+    ctx.font = '58px silkscreenbold';
+
+    var text = 'BE QUIET!';
+    var textWidth = ctx.measureText(text).width,
+    x = (screen.width() - textWidth) / 2,
+    y = screen.height() / 3;
+
+    ctx.fillText(text, x, y);
+
+
     var interval = setInterval(function () {
       var freqByteData = new Uint8Array(analyser.frequencyBinCount);
       analyser.getByteFrequencyData(freqByteData);
