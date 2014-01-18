@@ -621,7 +621,9 @@ var HELICOPTER = (function() {
     //window.webkitRequestAnimationFrame(drawVisualizer, canvas);
     //ctx.fillRect(canvas.width/4, canvas.height/3, 20, -volume);
   }
-
+  function fallback(e) {
+    alert("You must Accept");
+  }
   function detectBackgroundScreen() {
     drawScore();
     window.AudioContext = window.AudioContext ||
@@ -633,31 +635,36 @@ var HELICOPTER = (function() {
                           navigator.webkitGetUserMedia ||
                           navigator.mozGetUserMedia ||
                           navigator.msGetUserMedia;
-    navigator.getUserMedia(
-      {video: false, audio: true},
-      function(stream) {
-        var microphone = context.createMediaStreamSource(stream);
-        microphone.connect(analyser);
-        state = Heli.State.BACKGROUND;
+    if(!navigator.getUserMedia) {
+      fallback();
+    } else {
+        navigator.getUserMedia(
+        {video: false, audio: true},
+        function(stream) {
+          var microphone = context.createMediaStreamSource(stream);
+          microphone.connect(analyser);
+          state = Heli.State.BACKGROUND;
 
-        screen.draw(ctx);
-        screen.drawTerrain(ctx);
+          screen.draw(ctx);
+          screen.drawTerrain(ctx);
 
-        ctx.fillStyle = Heli.Color.HOME_TEXT;
-        ctx.font = '58px silkscreenbold';
+          ctx.fillStyle = Heli.Color.HOME_TEXT;
+          ctx.font = '58px silkscreenbold';
 
-        var text = 'BE QUIET!';
-        var textWidth = ctx.measureText(text).width,
-        x = (screen.width() - textWidth) / 2,
-        y = screen.height() / 3;
+          var text = 'BE QUIET!';
+          var textWidth = ctx.measureText(text).width,
+          x = (screen.width() - textWidth) / 2,
+          y = screen.height() / 3;
 
-        ctx.fillText(text, x, y);
+          ctx.fillText(text, x, y);
 
-        ctx.font = '14px silkscreen';
+          ctx.font = '14px silkscreen';
 
-        ctx.fillText('Click mouse to begin background noise calibration', x + 5, y + 66);
-      }
-    );
+          ctx.fillText('Click mouse to begin background noise calibration', x + 5, y + 66);
+        }
+      );
+    }
+    
     
   }
 
@@ -724,7 +731,7 @@ var HELICOPTER = (function() {
       //state = Heli.state.VOCALS;
       //detectBaseScreen();
       console.log(backgroundNoise);
-      if(backgorundNoise == 0) {
+      if(backgroundNoise == 0) {
         alert("Your mic is not on")
         calibrateBackground();
       }
