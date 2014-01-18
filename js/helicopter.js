@@ -67,7 +67,7 @@ Heli.User = function (params) {
 
   function finished() {
     var leaderboard = new Clay.Leaderboard( { id: 2638 } );
-    if (_distance > bestDistance()) {
+    if (_distance > bestDistance() && _distance > 100) {
       localStorage.bestDistance = _distance;
       var person = prompt("Please enter your name","");
       var options = {
@@ -75,7 +75,7 @@ Heli.User = function (params) {
           name: person
       }
       var show_options = { // all of these are optional
-          html: "<strong>Hi</strong>", // Optional, any custom html you want to show below the name
+          html: "", // Optional, any custom html you want to show below the name
           recent: 3600, // Optional, to limit scores to ones posted in last x seconds
           sort: 'desc', // Optional, sorting by "asc" will show the lowest scores first (ex. for fastest times)
           filter: ['day', 'month'], // Optional, Array of filters to narrow down high scores
