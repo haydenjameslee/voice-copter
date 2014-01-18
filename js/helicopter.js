@@ -736,7 +736,7 @@ var HELICOPTER = (function() {
       } else {
         thrustersOn = false;
       }
-      console.log(volume);
+      //console.log(volume);
     }, 100);
   }
 
