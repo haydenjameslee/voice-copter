@@ -663,9 +663,10 @@ var HELICOPTER = (function() {
           ctx.fillText('Click mouse to begin background noise calibration', x + 5, y + 66);
         }, 
         // errorCallback
-       function(err) {
-        if(err === PERMISSION_DENIED) {
-          alert("You must accept audio permissions");
+        function(err) {
+          if(err === PERMISSION_DENIED) {
+            alert("You must accept audio permissions");
+          }
         }
       );
     }
