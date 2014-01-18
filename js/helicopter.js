@@ -671,13 +671,11 @@ var HELICOPTER = (function() {
 
     ctx.fillText(text, x, y);
 
-    var t  = 'Sing a song';
-    var t1 = 'to go up, release to go down.';
+    var t  = 'Be loud to fly. Be silent to fall.';
 
     ctx.font = '12px silkscreen';
 
     ctx.fillText(t, x + 5, y + 20);
-    ctx.fillText(t1, x + 5, y + 33);
 
     ctx.fillText('Click mouse to start', x + 5, y + 66);
   }
