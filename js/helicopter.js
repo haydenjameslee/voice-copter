@@ -43,7 +43,7 @@ Heli.Consts = [
 ];
 
 Heli.FOOTER_HEIGHT = 20;
-Heli.FPS           = 19;
+Heli.FPS           = 10;
 
 Heli.Color = {
   BACKGROUND  : '#C3CCB5', BLOCK         : '#403B37',
@@ -58,7 +58,7 @@ Heli.User = function (params) {
   var _distance = 0;
   var position = null;
   var _trail   = null;
-  var momentum = null;
+  var momentum = 2;
 
   function finished() {
     if (_distance > bestDistance()) {
@@ -617,7 +617,7 @@ var HELICOPTER = (function() {
     ctx.fillText('by dale harvey / arandomurl.com', x + 5, y + 145);
   }
 
-  function showSound() {
+  function listenToSound() {
     var context = new webkitAudioContext();
     var analyser = context.createAnalyser();
     navigator.webkitGetUserMedia(
@@ -632,7 +632,12 @@ var HELICOPTER = (function() {
       var freqByteData = new Uint8Array(analyser.frequencyBinCount);
       analyser.getByteFrequencyData(freqByteData);
 
-      var volume = getAverageVolume(freqByteData);
+      var volume = getAverageVolume(freqByteData) * 5;
+      if (volume > 150) {
+        thrustersOn = true;
+      } else {
+        thrustersOn = false;
+      }
       console.log(volume);
     }, 100);
   }
@@ -660,7 +665,7 @@ var HELICOPTER = (function() {
 
     startScreen();
 
-    showSound();
+    listenToSound();
   }
 
   return {
