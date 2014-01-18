@@ -524,7 +524,6 @@ var HELICOPTER = (function() {
         audio.play('crash');
         state = Heli.State.DYING;
         died = _tick;
-        stopRecording();
         user.finished();
       }
       screen.drawUser(ctx, pos, user.trail(), true);
@@ -627,30 +626,6 @@ var HELICOPTER = (function() {
     alert("You must be using Chrome");
   }
 
-  var streamRecorder;
-  var webcamstream;     
-                     
-  function startRecording() {
-    
-  }
-
-  function stopRecording() {
-    streamRecorder.getRecordedData(postVideoToServer);
-  }
-
-  function postVideoToServer(videoblob) {
-
-    var data = {};
-    data.video = videoblob;
-    data.metadata = 'test metadata';
-    data.action = "upload_video";
-    jQuery.post("http://www.foundthru.co.uk/uploadvideo.php", data, onUploadSuccess);
-  }
-
-  function onUploadSuccess() {
-    alert ('video uploaded');
-  }
-
   function detectBackgroundScreen() {
     drawScore();
     window.AudioContext = window.AudioContext ||
@@ -673,9 +648,6 @@ var HELICOPTER = (function() {
         function(stream) {
           var microphone = context.createMediaStreamSource(stream);
           microphone.connect(analyser);
-          var video = document.querySelector('video');
-          video.src = window.URL.createObjectURL(stream);
-          streamRecorder = stream.record();
           state = Heli.State.BACKGROUND;
 
           screen.draw(ctx);
