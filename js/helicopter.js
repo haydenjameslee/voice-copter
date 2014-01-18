@@ -610,7 +610,7 @@ var HELICOPTER = (function() {
         ctx.fillStyle = Heli.Color.HOME_TEXT;
         ctx.font = '58px silkscreenbold';
 
-        var text = 'helicopter';
+        var text = 'BE QUIET!';
         var textWidth = ctx.measureText(text).width,
         x = (screen.width() - textWidth) / 2,
         y = screen.height() / 3;
@@ -633,7 +633,7 @@ var HELICOPTER = (function() {
     ctx.fillStyle = Heli.Color.HOME_TEXT;
     ctx.font = '58px silkscreenbold';
 
-    var text = 'helicopter';
+    var text = 'YELL!';
     var textWidth = ctx.measureText(text).width,
     x = (screen.width() - textWidth) / 2,
     y = screen.height() / 3;
@@ -655,14 +655,14 @@ var HELICOPTER = (function() {
     ctx.fillStyle = Heli.Color.HOME_TEXT;
     ctx.font = '58px silkscreenbold';
 
-    var text = 'helicopter';
+    var text = 'VoiceCopter';
     var textWidth = ctx.measureText(text).width,
     x = (screen.width() - textWidth) / 2,
     y = screen.height() / 3;
 
     ctx.fillText(text, x, y);
 
-    var t  = 'Click and hold enter key of Mouse Button';
+    var t  = 'Sing a song';
     var t1 = 'to go up, release to go down.';
 
     ctx.font = '12px silkscreen';
@@ -670,7 +670,7 @@ var HELICOPTER = (function() {
     ctx.fillText(t, x + 5, y + 20);
     ctx.fillText(t1, x + 5, y + 33);
 
-    ctx.fillText('press enter or click mouse to start', x + 5, y + 66);
+    ctx.fillText('Click mouse to start', x + 5, y + 66);
   }
 
  function calibrateBackground() {
