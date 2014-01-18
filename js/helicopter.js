@@ -724,6 +724,10 @@ var HELICOPTER = (function() {
       //state = Heli.state.VOCALS;
       //detectBaseScreen();
       console.log(backgroundNoise);
+      if(backgorundNoise == 0) {
+        alert("Your mic is not on")
+        calibrateBackground();
+      }
       state = Heli.State.WAITING;
       startScreen();
     }, 5000);
