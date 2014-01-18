@@ -45,7 +45,7 @@ var canvas;
 var Heli = {};
 
 Heli.Consts = [
-  {name: 'State', consts: ['WAITING', 'PAUSED', 'PLAYING', 'DYING', 'BACKGROUND', 'VOCALS']},
+  {name: 'State', consts: ['WAITING', 'PAUSED', 'PLAYING', 'DYING', 'BACKGROUND']},
   {name: 'Dir',   consts: ['UP', 'DOWN']}
 ];
 
@@ -484,9 +484,7 @@ var HELICOPTER = (function() {
       newGame();
     } else if (e.target.nodeName === 'CANVAS' && state === Heli.State.BACKGROUND) {
       calibrateBackground();
-    } else if (e.target.nodeName === 'CANVAS' && state === Heli.State.VOCALS) {
-      calibrateVocals();
-    }
+    } 
   }
 
   function mouseUp(e) {
@@ -668,26 +666,6 @@ var HELICOPTER = (function() {
     
   }
 
-  function detectVocalsScreen(avg) {
-
-    screen.draw(ctx);
-    screen.drawTerrain(ctx);
-
-    ctx.fillStyle = Heli.Color.HOME_TEXT;
-    ctx.font = '58px silkscreenbold';
-
-    var text = 'YELL!';
-    var textWidth = ctx.measureText(text).width,
-    x = (screen.width() - textWidth) / 2,
-    y = screen.height() / 3;
-
-    ctx.fillText(text, x, y);
-
-    ctx.font = '14px silkscreen';
-
-    ctx.fillText('Click mouse to begin your YELLING! calibration', x + 5, y + 66);
-  }
-
   function startScreen() {
 
     screen.draw(ctx);
@@ -725,7 +703,7 @@ var HELICOPTER = (function() {
       var volume = getAverageVolume(freqByteData);
       drawVisualizer(volume);
       volumes.push(volume);
-      console.log(volume);
+      //console.log(volume);
     }, 100);
 
     setTimeout(function () {
@@ -739,42 +717,12 @@ var HELICOPTER = (function() {
       //state = Heli.state.VOCALS;
       //detectBaseScreen();
       console.log(backgroundNoise);
-      state = Heli.State.VOCALS;
-      detectVocalsScreen();
+      state = Heli.State.WAITING;
+      startScreen();
     }, 5000);
 
    
   }
-
-  function calibrateVocals() {
-    var volumes = [];
-
-    var interval = setInterval(function () {
-      var freqByteData = new Uint8Array(analyser.frequencyBinCount);
-      analyser.getByteFrequencyData(freqByteData);
-
-      var volume = getAverageVolume(freqByteData);
-      volumes.push(volume);
-      console.log(volume);
-    }, 100);
-
-    setTimeout(function () {
-      clearInterval(interval);
-      var sum = 0;
-      for(var i = 0; i < volumes.length; i++){
-          sum += volumes[i];
-      }
-
-      vocals = (sum/volumes.length) - backgroundNoise;
-
-      //state = Heli.state.VOCALS;
-      //detectBaseScreen();
-      console.log(vocals);
-      state = Heli.State.WAITING;
-      startScreen();
-    }, 3000);
-  }
-
   function listenToSound() {
 
     setInterval(function () {
