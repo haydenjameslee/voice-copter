@@ -21,6 +21,8 @@ var analyser;
 var backgroundNoise;
 var vocals;
 
+var canvas;
+
 (function () {
   /* 0 - 9 */
   for (var i = 48; i <= 57; i++) {
@@ -483,7 +485,6 @@ var HELICOPTER = (function() {
   }
 
   function mainLoop() {
-
     ++_tick;
 
     if (state === Heli.State.PLAYING) {
@@ -528,24 +529,24 @@ var HELICOPTER = (function() {
   function drawScore() {
     ctx.font = '12px silkscreen';
 
-    var recordText = 'Best: ' + user.bestDistance() + 'm';
-    var distText = 'Distance: ' + user.distance() + 'm';
+    var recordText = "Best: " + user.bestDistance() + "m";
+    var distText = "Distance: " + user.distance() + "m";
     var textWidth = ctx.measureText(recordText).width;
     var textX = screen.height() + 15;
 
-    ctx.fillStyle = Heli.Color.FOOTER_BG;
+    //ctx.fillStyle = Heli.Color.FOOTER_BG;
     ctx.fillRect(0, screen.height(), screen.width(), Heli.FOOTER_HEIGHT);
 
-    ctx.fillStyle = Heli.Color.FOOTER_TEXT;
-    ctx.fillText(distText, 5, textX);
-    ctx.fillText(recordText, screen.width() - (textWidth + 5), textX);
+    //ctx.fillStyle = Heli.Color.FOOTER_TEXT;
+    ctx.fillText(distText, 20, 20);
+    ctx.fillText(recordText, 20, 30);
   }
 
   function init(wrapper, root) {
 
     var width  = wrapper.offsetWidth;
     var height = wrapper.offsetHeight;
-    var canvas = document.createElement('canvas');
+    canvas = document.createElement('canvas');
 
     canvas.setAttribute('width', width + 'px');
     canvas.setAttribute('height', height + 'px');
@@ -594,7 +595,13 @@ var HELICOPTER = (function() {
     }
   }
 
+  function drawVisualizer(volume) {
+    //window.webkitRequestAnimationFrame(drawVisualizer, canvas);
+    //ctx.fillRect(canvas.width/4, canvas.height/3, 20, -volume);
+  }
+
   function detectBackgroundScreen() {
+    drawScore();
     context = new webkitAudioContext();
     analyser = context.createAnalyser();
     navigator.webkitGetUserMedia(
@@ -679,8 +686,8 @@ var HELICOPTER = (function() {
     var interval = setInterval(function () {
       var freqByteData = new Uint8Array(analyser.frequencyBinCount);
       analyser.getByteFrequencyData(freqByteData);
-
       var volume = getAverageVolume(freqByteData);
+      drawVisualizer(volume);
       volumes.push(volume);
       console.log(volume);
     }, 100);
@@ -722,13 +729,14 @@ var HELICOPTER = (function() {
           sum += volumes[i];
       }
 
-      vocals = sum/volumes.length;
+      vocals = (sum/volumes.length) - backgroundNoise;
+
       //state = Heli.state.VOCALS;
       //detectBaseScreen();
       console.log(vocals);
       state = Heli.State.WAITING;
       startScreen();
-    }, 5000);
+    }, 3000);
   }
 
   function listenToSound() {
@@ -737,15 +745,9 @@ var HELICOPTER = (function() {
       var freqByteData = new Uint8Array(analyser.frequencyBinCount);
       analyser.getByteFrequencyData(freqByteData);
 
-      var volume;
+      var volume = getAverageVolume(freqByteData) - backgroundNoise;
 
-      if(vocals >= 50) {
-        volume = (getAverageVolume(freqByteData) - backgroundNoise) * 5
-      } else {
-        volume = 0;
-      }
-
-      if (volume > 150) {
+      if (vocals <= (volume * 3)) {
         thrustersOn = true;
       } else {
         thrustersOn = false;
