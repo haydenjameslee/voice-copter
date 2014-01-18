@@ -531,7 +531,7 @@ var HELICOPTER = (function() {
 
     } else if (state === Heli.State.DYING && (_tick - died) > (Heli.FPS / 1)) {
       drawScore();
-      dialog('Press enter to start again.');
+      dialog('Click to start again.');
 
       state = Heli.State.WAITING;
       window.clearInterval(timer);
@@ -552,7 +552,7 @@ var HELICOPTER = (function() {
 
   function drawScore() {
     ctx.font = '12px silkscreen';
-
+    ctx.fillStyle = Heli.Color.HOME_TEXT;
     var recordText = "Best: " + user.bestDistance() + "m";
     var distText = "Distance: " + user.distance() + "m";
     var textWidth = ctx.measureText(recordText).width;
