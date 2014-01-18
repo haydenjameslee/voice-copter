@@ -13,6 +13,9 @@
        .clay-leaderboard-entry img {
           display: none;
        }
+       #spinner { 
+        margin: 0 auto;
+       }
     </style>
 
 </head>
@@ -52,6 +55,7 @@
 
       function loaded() {
         Clay.ready( function() {
+          document.getElementById("spinner").style.display = 'none';
           HELICOPTER.init(helicopter, './');
         });
       };
