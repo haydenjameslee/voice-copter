@@ -273,7 +273,7 @@ Heli.Screen = function (params) {
 
     var i, len, mid, image;
 
-    mid = Math.round(_terrain.length * 0.5);
+    mid = Math.round(_terrain.length * 0.25);
     image = (alternate && params.tick()) % 4 < 2 ? img : img2;
 
     ctx.fillStyle = Heli.Color.USER;
