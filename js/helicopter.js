@@ -19,7 +19,6 @@ var KEY = {
 var context;
 var analyser;
 var backgroundNoise;
-var leaderboard = new Clay.Leaderboard( { id: 2638 } );
 var canvas;
 
 (function () {
@@ -67,6 +66,7 @@ Heli.User = function (params) {
   var momentum = 2;
 
   function finished() {
+    var leaderboard = new Clay.Leaderboard( { id: 2638 } );
     if (_distance > bestDistance()) {
       localStorage.bestDistance = _distance;
       var person = prompt("Please enter your name","");
