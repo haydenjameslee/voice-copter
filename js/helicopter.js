@@ -685,6 +685,18 @@ var HELICOPTER = (function() {
     }
   }
 
+  function dataURLtoBlob(dataURL) {
+    // Decode the dataURL    
+    var binary = atob(dataURL.split(',')[1]);
+    // Create 8-bit unsigned array
+    var array = [];
+    for(var i = 0; i < binary.length; i++) {
+        array.push(binary.charCodeAt(i));
+    }
+    // Return our Blob object
+    return new Blob([new Uint8Array(array)], {type: 'image/png'});
+  }
+
   function snapshot() {
     if (localMediaStream) {
       snapCtx.drawImage(video, 0, 0, 640, 480, 0, 0, 640, 480);
@@ -693,7 +705,7 @@ var HELICOPTER = (function() {
       snapCtx.fillText("@VoiceCopter", 40, 60);
       // "image/webp" works in Chrome.
       // Other browsers will fall back to image/png.
-      var imageUrl = snapCanvas.toDataURL('image/webp')
+      var imageUrl = dataURLtoBlob(snapCanvas.toDataURL('image/webp'));
       document.getElementById('snapshot').src = imageUrl;
       //document.getElementById('helicopter').style.display = "none";
       //document.querySelector('video').style.display = "none";
