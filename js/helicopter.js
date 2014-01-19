@@ -707,7 +707,7 @@ var HELICOPTER = (function() {
       // Other browsers will fall back to image/png.
       var imageUrl = URL.createObjectURL(dataURLtoBlob(snapCanvas.toDataURL('image/webp')));
       document.getElementById('snapshot').src = imageUrl;
-      document.getElementsByClassName('addthis_button_pinterest_share').setAttribute("addthis:url", imageUrl);
+      document.getElementsByClassName('addthis_button_pinterest_share')[0].setAttribute("addthis:url", imageUrl);
       //document.querySelector('video').style.display = "none";
 
       //document.getElementsByTagName('meta')[2].setAttribute('content', imageUrl);
