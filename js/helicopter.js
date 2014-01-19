@@ -349,14 +349,15 @@ Heli.Audio = function(game) {
     if (event.loaded === event.total &&
         typeof callback === 'function') {
       callback();
-      //files[name].removeEventListener('canplaythrough', progressEvents[name], true);
+      files[name]
+        .removeEventListener('canplaythrough', progressEvents[name], true);
     }
   }
 
   function disableSound() {
     for (var i = 0; i < playing.length; i++) {
-      //files[playing[i]].pause();
-      //files[playing[i]].currentTime = 0;
+      files[playing[i]].pause();
+      files[playing[i]].currentTime = 0;
     }
     playing = [];
   }
@@ -370,7 +371,7 @@ Heli.Audio = function(game) {
 
     var i, tmp = [], found = false;
 
-    //files[name].removeEventListener('ended', endEvents[name], true);
+    files[name].removeEventListener('ended', endEvents[name], true);
 
     for (i = 0; i < playing.length; i++) {
       if (!found && playing[i]) {
@@ -393,13 +394,13 @@ Heli.Audio = function(game) {
 
   function pause() {
     for (var i = 0; i < playing.length; i++) {
-      //files[playing[i]].pause();
+      files[playing[i]].pause();
     }
   }
 
   function resume() {
     for (var i = 0; i < playing.length; i++) {
-      //files[playing[i]].play();
+      files[playing[i]].play();
     }
   }
 
@@ -604,7 +605,7 @@ var HELICOPTER = (function() {
       // ['crash', root + 'crash.ogg']
     ];
 
-    //load(audio_files, function () { loaded(); });
+    load(audio_files, function () { loaded(); });
   }
 
   function load(arr, loaded) {
