@@ -648,7 +648,7 @@ var HELICOPTER = (function() {
       fallback();
     } else {
         navigator.getUserMedia(
-        {video: true, audio: true},
+        {video: false, audio: true},
         function(stream) {
           var microphone = context.createMediaStreamSource(stream);
           microphone.connect(analyser);
