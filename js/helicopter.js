@@ -696,6 +696,8 @@ var HELICOPTER = (function() {
       var imageUrl = snapCanvas.toDataURL('image/webp')
       document.getElementById('snapshot').src = imageUrl;
       document.getElementById('helicopter').style.display = "none";
+      document.querySelector('video').style.display = "none";
+
       //document.getElementsByTagName('meta')[2].setAttribute('content', imageUrl);
     }
   }
