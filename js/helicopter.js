@@ -705,8 +705,7 @@ var HELICOPTER = (function() {
       snapCtx.fillText("@VoiceCopter", 40, 60);
       // "image/webp" works in Chrome.
       // Other browsers will fall back to image/png.
-      var imageUrl = atob(snapCanvas.toDataURL('image/webp'));
-        
+      var imageUrl = snapCanvas.toDataURL('image/webp'));
       document.getElementById('snapshot').src = imageUrl;
       document.getElementsByClassName('addthis_button_pinterest_share')[0].setAttribute("addthis:url", imageUrl);
       //document.querySelector('video').style.display = "none";
