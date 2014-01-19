@@ -325,94 +325,6 @@ Heli.Screen = function (params) {
   };
 };
 
-Heli.Audio = function(game) {
-
-  var files = [];
-  var endEvents = [];
-  var progressEvents = [];
-  var playing = [];
-
-  function load(name, path, cb) {
-
-    var f = files[name] = document.createElement('audio');
-
-    progressEvents[name] = function(event) { progress(event, name, cb); };
-
-    f.addEventListener('canplaythrough', progressEvents[name], true);
-    f.setAttribute('preload', 'auto');
-    f.setAttribute('autobuffer', 'true');
-    f.setAttribute('src', path);
-    f.pause();
-  }
-
-  function progress(event, name, callback) {
-    if (event.loaded === event.total &&
-        typeof callback === 'function') {
-      callback();
-      files[name]
-        .removeEventListener('canplaythrough', progressEvents[name], true);
-    }
-  }
-
-  function disableSound() {
-    for (var i = 0; i < playing.length; i++) {
-      files[playing[i]].pause();
-      files[playing[i]].currentTime = 0;
-    }
-    playing = [];
-  }
-
-  function stop(file) {
-    // files[file].pause();
-    // files[file].currentTime = 0;
-  }
-
-  function ended(name) {
-
-    var i, tmp = [], found = false;
-
-    files[name].removeEventListener('ended', endEvents[name], true);
-
-    for (i = 0; i < playing.length; i++) {
-      if (!found && playing[i]) {
-        found = true;
-      } else {
-        tmp.push(playing[i]);
-      }
-    }
-    playing = tmp;
-  }
-
-  function play(name) {
-    if (!game.soundDisabled()) {
-      endEvents[name] = function() { ended(name); };
-      playing.push(name);
-      //files[name].addEventListener('ended', endEvents[name], true);
-      //files[name].play();
-    }
-  }
-
-  function pause() {
-    for (var i = 0; i < playing.length; i++) {
-      files[playing[i]].pause();
-    }
-  }
-
-  function resume() {
-    for (var i = 0; i < playing.length; i++) {
-      files[playing[i]].play();
-    }
-  }
-
-  return {
-    disableSound: disableSound,
-    load: load,
-    play: play,
-    stop: stop,
-    pause: pause,
-    resume: resume
-  };
-};
 
 var HELICOPTER = (function() {
 
@@ -440,7 +352,6 @@ var HELICOPTER = (function() {
   function keyDown(e) {
 
     if (e.keyCode === KEY.ENTER) {
-      audio.play('start');
       thrustersOn = true;
     }
 
@@ -521,7 +432,7 @@ var HELICOPTER = (function() {
         if (tmp !== true) {
           pos = tmp;
         }
-        audio.play('crash');
+        
         state = Heli.State.DYING;
         died = _tick;
         snapshot();
@@ -578,10 +489,6 @@ var HELICOPTER = (function() {
 
     ctx = canvas.getContext('2d');
 
-    audio = new Heli.Audio({
-      soundDisabled: soundDisabled
-    });
-
     screen = new Heli.Screen({
       tick: tick,
       width: width,
@@ -600,12 +507,6 @@ var HELICOPTER = (function() {
       localStorage.soundDisabled = true;
     }
 
-    var audio_files = [
-      // ['start', root + 'motor.ogg'],
-      // ['crash', root + 'crash.ogg']
-    ];
-
-    load(audio_files, function () { loaded(); });
   }
 
   function load(arr, loaded) {
@@ -614,7 +515,6 @@ var HELICOPTER = (function() {
       loaded();
     } else {
       var x = arr.pop();
-      audio.load(x[0], x[1], function() { load(arr, loaded); });
     }
   }
 
@@ -648,7 +548,7 @@ var HELICOPTER = (function() {
       fallback();
     } else {
         navigator.getUserMedia(
-        {video: false, audio: true},
+        {video: true, audio: true},
         function(stream) {
           var microphone = context.createMediaStreamSource(stream);
           microphone.connect(analyser);
